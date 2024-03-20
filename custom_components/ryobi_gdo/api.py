@@ -466,8 +466,16 @@ class RyobiWebSocket:
     """Represent a websocket connection to Ryobi servers."""
 
     def __init__(self, callback, username: str, apikey: str, device: str) -> None:
+        """Initialize Tracing"""
+        logging.basicConfig(level=logging.DEBUG)
+        trace_config = aiohttp.TraceConfig()
+        trace_config.on_request_start.append(on_request_start)
+        trace_config.on_request_end.append(on_request_end)
+        trace_config.on_request_exception.append(on_request_exception)
+        trace_config.on_exception.append(on_exception)
+        
         """Initialize a RyobiWebSocket instance."""
-        self.session = aiohttp.ClientSession()
+        self.session = aiohttp.ClientSession(trace_configs=[trace_config])
         self.url = f"wss://{HOST_URI}/{DEVICE_SET_ENDPOINT}"
         self._user = username
         self._apikey = apikey
@@ -653,3 +661,15 @@ class RyobiWebSocket:
 
 class APIKeyError(Exception):
     """Exception for missing API key."""
+
+async def on_request_start(session, context, params):
+    logging.getLogger('aiohttp.client').debug(f'Starting request <{params}>')
+
+async def on_request_end(session, context, params):
+    logging.getLogger('aiohttp.client').debug(f'Ending request <{params}>')
+
+async def on_exception(session, context, params):
+    logging.getLogger('aiohttp.client').debug(f'On conn exception <{params}>')
+
+async def on_request_exception(session, context, params):
+    logging.getLogger('aiohttp.client').debug(f'On req exception <{params}>')
