@@ -510,6 +510,7 @@ class RyobiWebSocket:
                 self.url,
                 heartbeat=15,
                 headers=header,
+                receive_timeout=5*60, #Should see something from Ryobi about every 5 Minutes
             ) as ws_client:
                 self._ws_client = ws_client
 

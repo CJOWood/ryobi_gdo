@@ -8,7 +8,7 @@ The Garage Door must first be setup and added through Ryobi's app. Once you've c
 
 ### Install from HACS (recommended)
 
-1. Have [HACS][hacs] installed, this will allow you to easily manage and track updates.
+1. Have HACS installed, this will allow you to easily manage and track updates.
 2. Search in HACS for "Ryobi (When its added)" integration.
 3. Add [https://github.com/catduckgnaf/ryobi_gdo](https://github.com/catduckgnaf/ryobi_gdo) as custom respository.
 4. Click Install below the found integration.
@@ -37,6 +37,6 @@ Please open an Issue and paste DEBUG logs or I can't help as easily. PLEASE remo
  - [x] Fully Support G125
  - [-] Get identities for all modules. (currently a work in progress.).
 ### 'Thank You's
- - [Madj42](https://github.com/Madj42) and his [ryobi_gdo3](https://github.com/Madj42/ryobi_gdo3) integratio.
- - [**Jezza34000**](https://github.com//CJOWood/) and his [**Ryobi Garage**](https://github.com/CJOWood/ryobi_garage/) for initial websocket work.
+ - [Madj42](https://github.com/Madj42) and his [ryobi_gdo3](https://github.com/Madj42/ryobi_gdo3) integration.
+ - [**CJOWood**](https://github.com//CJOWood/) and his [**Ryobi Garage**](https://github.com/CJOWood/ryobi_garage/) for initial websocket work.
  - [**firstof9**](https://github.com//firstof9/) and his enthusium for helping with this project.
