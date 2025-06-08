@@ -362,6 +362,8 @@ class RyobiApiClient:
             # STATE_STOPPED with no error
             else:
                 LOGGER.debug("Websocket state: %s error: %s", msg, error)
+            if self.callback is not None:
+                await self.callback()
 
         elif msg_type == "data":
             message = msg
@@ -502,7 +504,7 @@ class RyobiWebSocket:
                 self.url,
                 heartbeat=15,
                 headers=header,
-                receive_timeout=5*60, #Should see something from Ryobi about every 5 Minutes
+                receive_timeout=5 * 60,  # Should see something from Ryobi about every 5 minutes
             ) as ws_client:
                 self._ws_client = ws_client
 
