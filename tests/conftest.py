@@ -1,7 +1,7 @@
 # pylint: disable=protected-access,redefined-outer-name
 """Global fixtures for integration."""
 import os
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 from aioresponses import aioresponses
 import pytest
@@ -78,7 +78,8 @@ def mock_device(mock_aioclient):
 async def mock_ws(mock_aioclient):
     """Mock API call for API key endpoint."""
     with patch(
-        "custom_components.ryobi_gdo.api.RyobiApiClient.ws_connect"
+        "custom_components.ryobi_gdo.api.RyobiApiClient.ws_connect",
+        new_callable=AsyncMock,
     ) as mock_value:
         mock_value.return_value = True
         yield
@@ -88,7 +89,8 @@ async def mock_ws(mock_aioclient):
 def mock_ws_start():
     """Mock charger fw data."""
     with patch(
-        "custom_components.ryobi_gdo.api.RyobiApiClient.ws_connect"
+        "custom_components.ryobi_gdo.api.RyobiApiClient.ws_connect",
+        new_callable=AsyncMock,
     ) as mock_value:
         mock_value.return_value = True
         yield mock_value

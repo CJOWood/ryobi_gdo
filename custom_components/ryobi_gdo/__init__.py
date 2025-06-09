@@ -42,7 +42,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
         raise ConfigEntryNotReady
 
     # Start websocket listener
-    coordinator.client.ws_connect()
+    await coordinator.client.ws_connect()
 
     hass.data[DOMAIN][config_entry.entry_id] = {COORDINATOR: coordinator}
 
