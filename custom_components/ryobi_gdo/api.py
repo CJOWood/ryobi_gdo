@@ -173,7 +173,7 @@ class RyobiApiClient:
 
         # Reconnect logic
         if self.ws and not self.ws_listening:
-            self.ws_connect()
+            await self.ws_connect()
 
         update_ok = False
         url = f"https://{HOST_URI}/{DEVICE_GET_ENDPOINT}/{self.device_id}"
@@ -294,7 +294,7 @@ class RyobiApiClient:
         }
         return module_type[module]
 
-    def ws_connect(self) -> None:
+    async def ws_connect(self) -> None:
         """Connect to websocket."""
         if self.api_key is None:
             LOGGER.error("Problem refreshing API key.")
@@ -306,7 +306,7 @@ class RyobiApiClient:
             return
 
         LOGGER.debug("Websocket not connected, connecting now...")
-        self.open_websocket()
+        await self.open_websocket()
 
     async def ws_disconnect(self) -> bool:
         """Disconnect from websocket."""
@@ -315,22 +315,17 @@ class RyobiApiClient:
             LOGGER.debug("Websocket already disconnected.")
         await self.ws.close()
 
-    def open_websocket(self) -> None:
+    async def open_websocket(self) -> None:
         """Connect WebSocket to Ryobi Server."""
         try:
             LOGGER.debug("Attempting to find running loop...")
-            self._loop = asyncio.get_running_loop()
+            loop = asyncio.get_running_loop()
         except RuntimeError:
-            self._loop = asyncio.get_event_loop()
+            loop = asyncio.get_event_loop()
             LOGGER.debug("Using new event loop...")
 
         if not self.ws_listening:
-            self._loop.create_task(self.ws.listen())
-            pending = asyncio.all_tasks()
-            try:
-                self._loop.run_until_complete(asyncio.gather(*pending))
-            except RuntimeError:
-                LOGGER.info(INFO_LOOP_RUNNING)
+            loop.create_task(self.ws.listen())
 
     @callback
     async def _process_message(
@@ -504,7 +499,8 @@ class RyobiWebSocket:
                 self.url,
                 heartbeat=15,
                 headers=header,
-                receive_timeout=5 * 60,  # Should see something from Ryobi about every 5 minutes
+                receive_timeout=5
+                * 60,  # Should see something from Ryobi about every 5 minutes
             ) as ws_client:
                 self._ws_client = ws_client
 
