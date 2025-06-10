@@ -46,10 +46,12 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
 
     hass.data[DOMAIN][config_entry.entry_id] = {COORDINATOR: coordinator}
 
-    for platform in PLATFORMS:
-        hass.async_create_task(
+    await asyncio.gather(
+        *(
             hass.config_entries.async_forward_entry_setup(config_entry, platform)
+            for platform in PLATFORMS
         )
+    )
 
     return True
 
